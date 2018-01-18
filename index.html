@@ -13,12 +13,21 @@ body {
 <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.min.js"></script>
 </head>
 <body>
+		<audio autoplay loop>
+        <source src="Rammstein - Du Hast (Official Video)" type="audio/mpeg">
+			
 	<script type="text/javascript">
 		var game = new Phaser.Game(256, 240, Phaser.CANVAS, '', {
 			preload : preload,
 			create : create,
 			update : update
 		}, false, false);
+		
+	        var scoreStyle = {font : "bold 10pt Arial",fill: "#000", boundsAlignH: "center", boundsAlignV: "middle"};
+		var livesStyle = {font : "bold 10pt Arial",fill :"#000" , boundsAlignH: "center", boundsAlignV: "middle"};
+		var score = 0;
+		var lives = 1;
+		var coinsCounter = 0;
 
 		function preload() {
 
