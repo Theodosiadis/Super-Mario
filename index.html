@@ -14,7 +14,7 @@ body {
 </head>
 <body>
 		<audio autoplay loop>
-        <source src="Rammstein - Du Hast (Official Video)" type="audio/mpeg">
+        <source src="Rammstein - Du Hast (Official Video).mp3" type="audio/mpeg">
 			
 	<script type="text/javascript">
 		var game = new Phaser.Game(256, 240, Phaser.CANVAS, '', {
@@ -92,6 +92,12 @@ body {
 			game.camera.follow(player);
 
 			cursors = game.input.keyboard.createCursorKeys();
+			
+			textScore = game.add.text(10,10,"SCORE : " + score, scoreStyle);
+			textScore.fixedToCamera=true;
+			
+			textLives = game.add.text(23,27,"Lives : " + lives, livesStyle);
+			textLives.fixedToCamera = true;
 		}
 
 		function update() {
@@ -134,6 +140,14 @@ body {
 
 		function coinOverlap(player, coin) {
 			coin.kill();
+			kling.play();
+			coinsCounter ++;
+			score += 10;
+			textScore.text = "SCORE : " + score ;
+			if(coinsCounter % 10 == 0){	// every 10 coins gain 1 life
+				lives++;
+				textLives.text = "Lives : " + lives;
+		    }
 		}
 
 		function goombaOverlap(player, goomba) {
@@ -142,16 +156,29 @@ body {
 				goomba.frame = 2;
 				goomba.body.enable = false;
 				player.body.velocity.y = -80;
-				game.time.events.add(Phaser.Timer.SECOND, function() {
-					goomba.kill();
+				game.time.events.add(Phaser.Timer.SECOND, function()
+				score += 100;
+				textScore.text = "SCORE : " + score ;
+				goomba.kill();
+				stomp.play();
 				});
-			} else {
-				player.frame = 6;
-				player.body.enable = false;
-				player.animations.stop();
-				game.time.events.add(Phaser.Timer.SECOND * 3, function() {
+			}else {					//kill player by goomba.				
+				if (lives === 0) {
+					textLives.text = " NONE";
 					game.paused = true;
-				});
+				}
+			} else 
+					lives--;														
+					player.frame = 6;
+					player.body.velocity.y = -190;
+					player.animations.stop();
+					game.time.events.add(Phaser.Timer.SECOND , function() {	player.body.enable = false; });
+					score = 0;
+					
+					game.state.restart();
+				
+
+				}
 			}
 		}
 	</script>
